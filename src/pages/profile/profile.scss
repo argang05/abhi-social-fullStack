@@ -1,0 +1,154 @@
+@import "../../style.scss";
+
+.profile{
+    @include themify($themes){
+        background-color: themed("bgSoft");
+
+        .images{
+            width: 100%;
+            height: 300px;
+            position: relative;
+            .cover{
+                width: 100%;
+                height: 100%;
+                object-fit: cover; 
+            }
+
+            .profilePic{
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                object-fit: cover;
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: auto;
+                top: 220px;
+            }
+        }
+        .profileContainer{
+            padding: 20px;
+
+            @include mobile {
+                padding: 10px;
+            }
+
+            @include tablet {
+                padding: 20px;
+            }
+            .uInfo {
+                    height: 180px;
+                    -webkit-box-shadow: themed("boxShadowWebkit");
+                    -moz-box-shadow: themed("boxShadowMoz");
+                    box-shadow: themed("boxShadow");
+                    border-radius: 20px;
+                    background-color: themed("bg");
+                    color: themed("textColor");
+                    padding: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 30px;
+                    margin-bottom: 20px;
+
+                    @include mobile {
+                        flex-direction: column;
+                        height: 40vh;
+                        padding: 15px;
+                        margin-top: 75px;
+                        gap: 20px;
+                    }
+
+                    .left{
+                        flex: 1;
+                        display: flex;
+                        gap: 5px;
+
+                        @include tablet {
+                            gap: 8px;
+                        }
+                        a{
+                            color: themed("textColorSoft");
+                            width: 30px;
+                            @include tablet{
+                                height: 25px;
+                                width: 25px;
+                            }
+                        }
+                    }
+                    .center{
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 9px;
+
+                        span{
+                            font-size: 20px;
+                            font-weight: 500;
+                            @include mobile{
+                                font-size: 30px;
+                            }
+
+                        }
+                        .info{
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+
+                            @include mobile{
+                                gap: 10px;
+                                justify-content: space-around;
+                            }
+                            @include tablet{
+                                gap: 10px;
+                                justify-content: space-around;
+                            }
+
+                            .item{
+                                display: flex;
+                                align-items: center;
+                                gap: 5px;
+                                color: themed("textColorSoft");
+                                span {
+                                        font-size: 12px;
+                                        @include mobile{
+                                            font-size: 14px;
+                                        }
+                                }
+                            } 
+                        }
+                        button {
+                            border: none;
+                            background-color: #5271ff;
+                            color: white;
+                            padding: 9px;
+                            cursor: pointer;
+                            border-radius: 9px;
+
+                            @include mobile{
+                                margin-top: 20px;
+                                padding: 13px;
+                                font-size: 15px;
+                                font-weight: 500;
+                            }
+                            @include tablet{
+                                padding: 12px;
+                                font-size: 14px;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+                    .right{
+                        flex: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        gap: 8px;
+                    }
+                }
+        }
+
+    }
+}

@@ -1,0 +1,57 @@
+$themes:(
+    light:(
+        textColor: #000,
+        bg: #fff,
+        logo: darkblue,
+        bgSoft: #f6f3f3,
+        textColorSoft: #555,
+        border: lightgray,
+        boxShadowWebkit : 0px 0px 15px 1px rgba(0, 0, 0, 0.144),
+        boxShadowMoz: 0px 0px 15px 1px rgba(0, 0, 0, 0.144),
+        boxShadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.144),
+    ),
+    dark:(
+        textColor: whitesmoke,
+        bg: #222,
+        logo: white,
+        bgSoft: #333,
+        textColorSoft: lightgray,
+        border: #444,
+        boxShadowWebkit : 0px 0px 15px 1px rgba(255, 255, 255, 0.095),
+        boxShadowMoz: 0px 0px 15px 1px rgba(247, 247, 247, 0.095),
+        boxShadow: 0px 0px 15px 1px rgba(247, 247, 247, 0.095),
+    ),
+);
+
+@mixin themify($theme){
+    @each $theme, $map in $themes{
+        .theme-#{$theme} & {
+            $theme-map: () !global;
+            @each $key, $submap in $map{
+                $value: map-get(map-get($themes , $theme), "#{$key}");
+                $theme-map: map-merge(
+                    $theme-map,
+                    (
+                        $key: $value,
+                    )
+                ) !global;
+            }
+            @content;
+            $theme-map: null !global;
+        }
+    }
+}
+@function themed($key){
+    @return map-get($theme-map , $key);
+}
+
+@mixin mobile{
+    @media (max-width:480px) {
+        @content;
+    }
+}
+@mixin tablet{
+    @media (max-width:960px) and (min-width:481px) {
+        @content;
+    }
+}
