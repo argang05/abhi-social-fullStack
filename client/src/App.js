@@ -23,7 +23,7 @@ import {
 
 
 function App(){
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
   const {darkMode} = useContext(DarkModeContext);
 
@@ -34,14 +34,14 @@ function App(){
     return (
       <QueryClientProvider client={queryClient}>
           <div className= {`theme-${darkMode ? "dark" : "light"}`}>
-          <NavBar />
-          <div style={{display:"flex"}}>
-            <LeftBar />
-            <div style={{flex:6.5}}>
-              <Outlet />
+            <NavBar />
+            <div style={{display:"flex"}}>
+              <LeftBar />
+              <div style={{flex:6.5}}>
+                <Outlet />
+              </div>
+              <RightBar />
             </div>
-            <RightBar />
-          </div>
         </div>
       </QueryClientProvider>
     );

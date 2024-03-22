@@ -4,7 +4,7 @@ import Map from "../../assets/map.png";
 import Friend from "../../assets/friend.png";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext";
-import { useMutation, useQueryClient, QueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, QueryClient, useQuery } from '@tanstack/react-query';
 import { makeRequest } from "../../axios";
 
 const Share = () => {
@@ -23,7 +23,7 @@ const Share = () => {
     }
   }
 
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);  
 
   const queryClient = useQueryClient();
 
@@ -43,7 +43,7 @@ const Share = () => {
     if (file) {
       imgUrl = await upload();
     }
-    mutation.mutate({ desc, img: imgUrl });
+    mutation.mutate({ desc, img: imgUrl  });
     setDesc("");
     setFile(null);
   }
@@ -53,11 +53,8 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <div className="left">
-            <img
-              src={currentUser.profilePic}
-              alt=""
-            />
-            <input type="text" placeholder={`What's on your mind ${currentUser.name}?`} 
+            <img src={"/upload/"+currentUser?.profilePic} />
+            <input type="text" placeholder={`What's on your mind ?`} 
               onChange={(e) => setDesc(e.target.value)}
               value={desc}
             />

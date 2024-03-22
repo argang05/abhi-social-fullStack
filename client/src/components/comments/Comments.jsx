@@ -61,7 +61,7 @@ const Comments = ({ postId }) => {
     return (
         <div className="comments">
             <div className="write">
-                <img src={currentUser.profilePic} />
+                <img src={"/upload/"+currentUser.profilePic} />
                 <input
                     type="text"
                     placeholder="write a comment..."
@@ -75,7 +75,7 @@ const Comments = ({ postId }) => {
             {isPending ? "Loading..." :
                 data.map(comment => (
                     <div className="comment">
-                        <img src={comment.profilePic} />
+                        <img src={"/upload/"+comment.profilePic} />
                         <div className="info">
                             <span>{comment.name}</span>
                             <p>{comment.desc}</p>

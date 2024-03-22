@@ -12,14 +12,17 @@ import Posts from "../../components/posts/Posts"
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { makeRequest } from "../../axios.js";
 import { useLocation } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../context/authContext.js";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/authContext";
+import Update from "../../components/update/Update";
 
 const Profile = () => {
 
+    const [openUpdate, setOpenUpdate] = useState(false);
+
     const { currentUser } = useContext(AuthContext);
 
-    const userId = parseInt(useLocation().pathname.split("/")[2]); //Split pathname on basis of '/' and pick the 3rd element(which is profile id) 
+    const userId = parseInt(useLocation().pathname.split("/")[2]); //Split pathname on basis of '/' and pick the 3rd element(which is profile id)
     
     const { isPending, error, data } = useQuery({
         queryKey: ["user"],
@@ -28,13 +31,45 @@ const Profile = () => {
                 return resp.data;
             })
     });
+    const { isPending : rIsPending , data : relationshipData } = useQuery({
+        queryKey: ["relationship"],
+        queryFn: () =>
+            makeRequest.get("/relationships?followedUserId="+userId).then(resp => {
+                return resp.data;
+            })
+    });
+
+    console.log(data);
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: (following) => {
+            if (following) {
+                return makeRequest.delete("/relationships?userId="+userId);
+            }
+            return makeRequest.post("/relationships" , {userId})
+        },
+        onSuccess: () => { 
+        // Invalidate and refetch
+        queryClient.invalidateQueries({ queryKey: ["relationship"] })
+        },
+    })  
+
+    const handleFollow = () => {
+        mutation.mutate(relationshipData?.includes(currentUser.id))
+    };
 
     return (
         <div className="profile">
             {isPending ? "Loading" : <>
                 <div className="images">
-                    <img src={data?.coverPic} className="cover" />
-                    <img src={data?.profilePic} className="profilePic" />
+                    {
+                        <img src={"/upload/"+ data.coverPic} className="cover" />
+                    }
+                    
+                    {
+                        <img src={"/upload/"+ data.profilePic} className="profilePic" />
+                    }
                 </div>
                 <div className="profileContainer">
                     <div className="uInfo">
@@ -56,18 +91,28 @@ const Profile = () => {
                             </a>
                         </div>
                         <div className="center">
-                            <span>{data?.name}</span>
+                            <span>{data.name}</span>
                             <div className="info">
                                 <div className="item">
                                     <PlaceIcon />
-                                    <span>{data?.city}</span>
+                                    <span>{data.city}</span>
                                 </div>
                                 <div className="item">
                                     <LanguageIcon />
-                                    <span>{data?.website}</span>
+                                    <span>{data.website}</span>
                                 </div>
                             </div>
-                            {userId === currentUser.id ? (<button>Update</button>) : (<button>Follow</button>)}
+                            {rIsPending ? "Loading..." : userId === currentUser.id ?
+                                (
+                                    <button onClick={()=>setOpenUpdate(true)}>Update</button>
+                                )
+                                :
+                                (
+                                    <button onClick={handleFollow}>
+                                    {relationshipData?.includes(currentUser.id) ? "Following" : "Follow"}
+                                    </button>
+                                )
+                            }
                         </div>
                         <div className="right">
                             <EmailOutlinedIcon />
@@ -77,7 +122,8 @@ const Profile = () => {
                     <Posts userId={userId}/>
                 </div>
             </>
-        }
+            }
+            {openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data} />}
         </div>
     );
 };
