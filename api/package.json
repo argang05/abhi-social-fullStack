@@ -16,9 +16,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "prestart": "chmod +x node_modules/.bin/js-node",
     "start": "nodemon index.js",
     "build": "npm i"
+  },
+  "bin" : {
+    "execute" : "index.js"
   },
   "keywords": [],
   "author": "",
